@@ -2,6 +2,7 @@ import { User } from "../interfaces/User"
 import styled from "styled-components"
 import { useRouter } from "next/router"
 import { useCallback } from "react"
+import { Button } from "./Button"
 
 type Props = {
 
@@ -12,22 +13,19 @@ const Avatar = styled.img`
 `
 
 const CardContainer = styled.div`
-    grid-column: span 3;
+    grid-column: span 2;
 `
 
 const Name = styled.h2`
     text-align: center;
 `
 
-const Anchor = styled.a`
-`
 const FlexContainer = styled.div`
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 `
-const Bio = styled.p`
 
-`
 export const UserCard: React.FC<Props> = (props) => {
     const router = useRouter();
 
@@ -40,16 +38,11 @@ export const UserCard: React.FC<Props> = (props) => {
 
     return (
         <CardContainer>
-            <Avatar src={props.avatarUrl} onClick={goToUserPage}></Avatar>
-            <Name>{props.name}</Name>
+            <Avatar src={props.avatarUrl} />
             <FlexContainer>
-                    <div>{props.login}</div>
-                    <span>•</span>
-                    <Anchor href={props.email}>{props.email}</Anchor>
-                    <span>•</span>
-                    <Anchor href={props.websiteUrl}>Website</Anchor>
+                <Name>{props.login}</Name>
+                <Button onClick={goToUserPage}>Show more</Button>
             </FlexContainer>
-            <Bio>{props.bio}</Bio>
         </CardContainer>
     )
 

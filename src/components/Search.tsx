@@ -8,7 +8,8 @@ type Props = {
 }
 
 const SearchInput = styled.input`
-    max-width: 300px;
+    width: 100%;
+    height: 25px;
 `
 
 export const Search: React.FC<Props> = (props) => (

@@ -12,6 +12,7 @@ export const UserCardList: React.FC<Props> = (props: Props) =>
     <Grid>
     {props.userList && props.userList.map(user => 
         <UserCard 
+            key={user.login}
             name={user.name}
             bio={user.bio} 
             avatarUrl={user.avatarUrl} 

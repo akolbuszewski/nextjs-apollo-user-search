@@ -7,10 +7,6 @@ query SearchUsers($query: String!, $first: Int! ) {
       node {
         ... on User {
           login,
-          name,
-          bio,
-          websiteUrl,
-          email,
           avatarUrl,
         }
       }
@@ -25,6 +21,7 @@ user(login: $login) {
     name,
     bio,
     websiteUrl,
-}
+    email,
+  }
 }
 `    

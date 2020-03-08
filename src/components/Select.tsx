@@ -1,6 +1,5 @@
 import { ChangeEvent, useCallback } from "react"
 import styled from "styled-components"
-import { breakpoint } from "styled-components-breakpoint"
 import { SearchType } from "../interfaces/SearchType"
 
 export type SelectOption = {
@@ -14,16 +13,9 @@ type Props = {
 }
 
 const SelectComponent = styled.select`
-  grid-column: 1/5;
-    ${breakpoint('tablet')`
-        grid-column: 1/9;
-    `}
-    ${breakpoint('desktop')`
-        grid-column: 1/13;
-    `}
-    max-width: 300px;
-    justify-self: center;
-`
+  width: 100%;
+  height: 25px;
+  `
 
 export const Select: React.FC<Props> = (props) => {
     const callback = useCallback(

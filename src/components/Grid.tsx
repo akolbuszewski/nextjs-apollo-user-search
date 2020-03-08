@@ -5,6 +5,7 @@ export interface RowProps {
     mobile: string,
     tablet: string,
     desktop: string,
+    justify?: string;
 }
 
 export const Grid = styled.div`
@@ -31,4 +32,8 @@ export const Row = styled.div<RowProps>`
     ${(props) => breakpoint('desktop')`
         grid-column: ${props.desktop};
     `}
+
+    ${(props) => 
+        props.justify && `justify-self: ${props.justify}`
+    }
 `

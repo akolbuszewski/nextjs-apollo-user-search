@@ -4,6 +4,9 @@ import { GET_USER_QUERY } from '../../query';
 import withApollo from '../../../lib/withApollo';
 import { User } from '../../interfaces/User';
 import { Grid, RowProps, Row } from '../../components/Grid';
+import { GlobalStyle } from '../../styles/globalStyle';
+import { Button } from './../../components/Button';
+import { useCallback } from 'react';
 
 
 const leftRowProps: RowProps = {
@@ -18,10 +21,23 @@ const rightRowProps: RowProps = {
   desktop: '6/8',
 }
 
+const centerRowProps: RowProps = {
+  mobile: '2/4',
+  tablet: '3/5',
+  desktop: '5/7',
+}
+
 
 const UserPage = () => {
   const router = useRouter()
   const { login } = router.query;
+
+  const goToUsersPage = useCallback(
+    () => {
+        router.push(`/users`)
+    },
+    [],
+);
 
   const { loading, data } = useQuery(GET_USER_QUERY, {
     variables: { login },
@@ -32,10 +48,11 @@ const UserPage = () => {
     return null;
   }
 
-  const user: Pick<User, 'name' | 'bio' | 'websiteUrl' | 'login'> = data.user;
+  const user: Pick<User, 'name' | 'bio' | 'websiteUrl' | 'login' | 'email'> = data.user;
 
   return (
     <Grid>
+      <GlobalStyle/>
       <Row {...leftRowProps}>
         <p>Login:</p>
       </Row>
@@ -59,6 +76,15 @@ const UserPage = () => {
       </Row>
       <Row {...rightRowProps}>
         <a href={user.websiteUrl}>{user.websiteUrl}</a>
+      </Row>
+      <Row {...leftRowProps}>
+        <p>Email:</p>
+      </Row>
+      <Row {...rightRowProps}>
+        <p>{user.email}</p>
+      </Row>
+      <Row {...centerRowProps}>
+        <Button onClick={goToUsersPage}>Go Back</Button>
       </Row>
     </Grid>
   )

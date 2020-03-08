@@ -9,14 +9,14 @@ export const validators = {
     },
     login: {
         validator: (value: string) => {
-            const validationResult = value.length > 3;
+            const validationResult = value.length >= 3;
             return validationResult;
         },
         errorMsg: 'Login should have at least 3 letter'
     },
     name: {
         validator: (value: string) => {
-            const validationResult = value.length > 3;
+            const validationResult = value.length >= 3;
             return validationResult;
         },
         errorMsg: 'Name should have at least 3 letters'

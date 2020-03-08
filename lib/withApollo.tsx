@@ -8,7 +8,8 @@ export default withApollo(
       uri: 'https://api.github.com/graphql',
       cache: new InMemoryCache().restore(initialState || {}),
       request: (operation) => {
-        const token = '65c9cd3b9654d1aed7567d89587e92fc24b1cc4b'
+        // TODO: INSERT KEY HERE
+        const token = 'INSERT PRIVATE KEY HERE'
         operation.setContext({
           headers: {
             Authorization: `token ${token}`
