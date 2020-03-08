@@ -7,8 +7,8 @@ const IndexPage: NextPage = () => {
     <div>
       <h1>Hello Next.js 👋</h1>
       <p>
-        <Link href="/about">
-          <a>About</a>
+        <Link href="/users">
+          <a>Users</a>
         </Link>
       </p>
       </div>

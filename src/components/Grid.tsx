@@ -1,5 +1,12 @@
 import styled from "styled-components";
 import { breakpoint } from 'styled-components-breakpoint';
+
+export interface RowProps {
+    mobile: string,
+    tablet: string,
+    desktop: string,
+}
+
 export const Grid = styled.div`
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -13,5 +20,15 @@ export const Grid = styled.div`
     ${breakpoint('desktop')`
         grid-template-columns: repeat(12, 1fr);
         grid-column: 1/13;
+    `}
+`
+
+export const Row = styled.div<RowProps>`
+    grid-column: ${(props) => props.mobile};
+    ${(props) => breakpoint('tablet')`
+        grid-column: ${props.tablet};
+    `}
+    ${(props) => breakpoint('desktop')`
+        grid-column: ${props.desktop};
     `}
 `

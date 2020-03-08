@@ -1,104 +1,87 @@
 import * as React from 'react'
-import withApollo from '../lib/withApollo'
-import { gql } from 'apollo-boost';
+import withApollo from '../../lib/withApollo'
 import { useQuery } from '@apollo/react-hooks';
-import { User } from '../interfaces/User';
 import { Grid } from '../components/Grid';
 import { Search } from '../components/Search';
 import { useState } from 'react';
 import { UserCardList } from '../components/CardList';
 import { SelectOption, Select } from '../components/Select';
-
-
-const QUERY2 = gql`
-query SearchUsers($query: String!, $first: Int! ) {
-  search(query: $query, type: USER, first: $first) {
-    edges {
-      node {
-        ... on User {
-          login,
-          name,
-          bio,
-          websiteUrl,
-          email,
-          avatarUrl,
-        }
-      }
-    }
-  }
-}`
-
-const mapQueryResultToUsers = (results: any): User[] => {
-  return !!results && results.search.edges.reduce(
-    (users: User[], edge: any) => [...users, edge.node],
-    [],
-  )
-}
+import { Validation } from '../components/Validation';
+import { SearchType } from '../interfaces/SearchType';
+import { SEARCH_USERS_QUERY } from '../query';
+import { validators } from '../validators';
+import { mapQueryResultToUsers } from '../helpers/mappers';
 
 const initialOptions: SelectOption[] = [
   {
-  name: 'login',
-  value: 'login',
+  name: SearchType.login,
+  value: SearchType.login,
   selected: false,
 },
 {
-  name: 'name',
-  value: 'name',
+  name: SearchType.name,
+  value: SearchType.name,
   selected: false,
 },
 {
-  name: 'email',
-  value: 'email',
+  name: SearchType.email,
+  value: SearchType.email,
   selected: true,
-},
-]
+},]
 
-const AboutPage: React.FunctionComponent = () => {
+const UsersPage: React.FunctionComponent = () => {
   const [search, setSearch] = useState('');
   const [options, setOptions] = useState<SelectOption[]>(initialOptions);
 
   const changeSearch = React.useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setSearch(event.target.value);
-      refetch();
     },
     [],
   )
 
   const selectOptions = React.useCallback(
     (name: string) => {
-      console.log(name);
       setOptions(options.map(
         option => (
           {...option, selected: option.name === name}
             )
           )
         )
-      refetch();
     },
     [],
   )
   
   const fieldType = options.find(option => option.selected);
-    console.log(`${search} in:${fieldType && fieldType.name}`)
 
-  const { loading, error, data, refetch } = useQuery(QUERY2, {
+  const { loading, error, data } = useQuery(SEARCH_USERS_QUERY, {
     variables: { query: `${search} in:${fieldType && fieldType.name}`, first: 10 },
+    skip: !process.browser,
   });
- 
+
+  const users = mapQueryResultToUsers(data);
+
+  const currentlySelectedOption: SearchType = options.find((option) => option.selected)?.name || SearchType.name;
+  
   if(error){
     return <h1>{JSON.stringify(error)}</h1>
   }
 
-  const users = mapQueryResultToUsers(data);
   return (
     <Grid>
       <Select options={options} selectCallback={selectOptions} />
-      
-      <Search onChange={changeSearch} value={search}></Search>
-        {(!loading || data) &&<UserCardList userList={users} />}
+      <Validation
+        validation={validators[currentlySelectedOption].validator}
+        value={search}
+        onChange={changeSearch}
+        errorMsg={validators[currentlySelectedOption].errorMsg}
+        render={ ({value, onChange}) =>
+        <Search onChange={onChange} value={value} placeholder={currentlySelectedOption}/>
+      }
+      />
+      {(!loading || data) &&<UserCardList userList={users} />}
     </Grid>
   )
 }
 
-export default withApollo(AboutPage)
+export default withApollo(UsersPage)

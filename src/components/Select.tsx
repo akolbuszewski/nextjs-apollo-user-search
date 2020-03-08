@@ -1,10 +1,11 @@
 import { ChangeEvent, useCallback } from "react"
 import styled from "styled-components"
 import { breakpoint } from "styled-components-breakpoint"
+import { SearchType } from "../interfaces/SearchType"
 
 export type SelectOption = {
-    name: string,
-    value: string,
+    name: SearchType,
+    value: SearchType,
     selected: boolean,
 }
 type Props = {
